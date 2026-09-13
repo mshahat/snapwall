@@ -19,12 +19,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
-{{- define "snapwall.version" -}}
+{{- define "snapwall.tag" -}}
 {{- .Values.image.tag | default .Chart.AppVersion -}}
 {{- end -}}
 
+{{- /* Version shown on screen: the image tag, or appVersion when the tag says nothing (latest). */}}
+{{- define "snapwall.version" -}}
+{{- $tag := include "snapwall.tag" . -}}
+{{- eq $tag "latest" | ternary .Chart.AppVersion $tag -}}
+{{- end -}}
+
 {{- define "snapwall.image" -}}
-{{- printf "%s:%s" .Values.image.repository (include "snapwall.version" .) -}}
+{{- printf "%s:%s" .Values.image.repository (include "snapwall.tag" .) -}}
 {{- end -}}
 
 {{- define "snapwall.claimName" -}}

@@ -1,7 +1,7 @@
 image:
   repository: ghcr.io/mshahat/snapwall   # set to your registry
-  tag: ""                              # defaults to the chart appVersion; shown on screen as the version
-  pullPolicy: IfNotPresent
+  tag: latest                          # empty = chart appVersion; shown on screen as the version (latest shows appVersion)
+  pullPolicy: Always                   # needed with latest, or nodes keep running a cached image
 
 imagePullSecrets: []
 
