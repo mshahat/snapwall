@@ -89,6 +89,8 @@
     $("pod").replaceChildren(document.createTextNode(parts.length ? parts.join("-") + "-" : ""), el("span", "hi", tail));
     $("pod").title = `${data.namespace}/${data.pod}`;
     $("cluster").textContent = data.cluster;
+    $("url").textContent = data.ingress_host;
+    $("url").hidden = !data.ingress_host;
     $("node").textContent = data.node;
     $("node").title = data.node;
     $("uptime").replaceChildren(document.createTextNode(duration(data.uptime)), el("span", "dim", ` · Generation ${data.boots_total}`));
@@ -173,9 +175,16 @@
     const firstRender = seenBoots.size === 0;
     const items = data.boots.map((b, i) => {
       const key = `${b.pod}@${b.started_at}`;
-      const li = el("li", "gen" + (i === 0 ? " current" : "") + (!firstRender && !seenBoots.has(key) ? " fresh" : ""));
-      const life = i === 0 ? `live ${duration(data.server_time - b.started_at)}` : `lived ${duration(b.last_seen - b.started_at)}`;
-      li.append(el("span", "gen-dot"), el("span", "gen-name", shortPod(b.pod)), el("span", "gen-meta", `v${b.version} · ${clock(b.started_at)} · ${life}`));
+      const older = data.boots[i + 1];
+      const moved = older && older.cluster && b.cluster && older.cluster !== b.cluster;
+      const li = el("li", "gen" + (i === 0 ? " current" : "") + (moved ? " moved" : "") + (!firstRender && !seenBoots.has(key) ? " fresh" : ""));
+      const life = duration((i === 0 ? data.server_time : b.last_seen) - b.started_at);
+      li.append(
+        el("span", "gen-dot"),
+        el("span", "gen-name", shortPod(b.pod)),
+        el("span", "gen-cluster", b.cluster || "—"),
+        el("span", "gen-meta", `v${b.version} · ${clock(b.started_at)} · ${life}`),
+      );
       seenBoots.add(key);
       return li;
     });
@@ -212,6 +221,7 @@
     check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
     arrow: '<svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>',
     spark: '<svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>',
+    globe: '<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9s-1.3 6.5-3.8 9M12 3c-2.5 2.5-3.8 5.5-3.8 9s1.3 6.5 3.8 9"/></svg>',
   };
   let momentTimer = null;
 
@@ -238,7 +248,9 @@
   function narrate(prev, data) {
     const photos = data.photos_total;
     const kept = `${photos} photo${photos === 1 ? "" : "s"} · ${nf.format(data.storage.writes)} writes`;
-    if (prev.version !== data.version) {
+    if (prev.cluster && prev.cluster !== data.cluster) {
+      showMoment("globe", "New cluster. Same data.", `Now on ${data.cluster} · ${kept} intact`);
+    } else if (prev.version !== data.version) {
       showMoment("arrow", `Now running v${data.version}`, `Rolled out from Git by Flux · ${kept} preserved`);
     } else if (prev.config_hash !== data.config_hash) {
       showMoment("spark", "New configuration live", `Committed to Git, reconciled by Flux · ${kept} preserved`);
@@ -252,7 +264,7 @@
   }
   function savePrev(data) {
     try {
-      sessionStorage.setItem(STORE_KEY, JSON.stringify({ pod: data.pod, version: data.version, config_hash: data.config_hash }));
+      sessionStorage.setItem(STORE_KEY, JSON.stringify({ pod: data.pod, cluster: data.cluster, version: data.version, config_hash: data.config_hash }));
     } catch { /* storage unavailable: moments after reload are skipped */ }
   }
 

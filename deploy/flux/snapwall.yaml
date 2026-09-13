@@ -37,5 +37,5 @@ spec:
   values:
     image:
       repository: ghcr.io/mshahat/snapwall   # lowercase owner
-    cluster:
-      name: nkp-cluster                    # the name you want on screen
+    # cluster.name and ingress.host are not Helm values: the pod reads them from
+    # ConfigMap snapwall-cluster in each cluster (deploy/cluster-config/).

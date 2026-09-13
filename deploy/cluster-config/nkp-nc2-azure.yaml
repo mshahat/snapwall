@@ -1,0 +1,20 @@
+# Per-cluster identity for SnapWall. Apply once, before restoring the app snapshot:
+#   kubectl apply -f deploy/cluster-config/nkp-nc2-azure.yaml
+# Not managed by Flux or the chart. Keep it out of app snapshots so each cluster keeps its own.
+# After changing it:  kubectl -n snapwall rollout restart deploy/snapwall
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: snapwall
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: snapwall-cluster
+  namespace: snapwall
+  labels:
+    snapwall-cluster-config: "true"   # cluster-local: exclude from app snapshots
+data:
+  cluster.name: nkp-nc2-azure
+  ingress.host: snapwall.azure.example.com   # shown on screen; point this DNS name at the cluster's ingress

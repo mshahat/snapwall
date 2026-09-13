@@ -33,7 +33,7 @@ Data is written to `./data` (`snapwall.db`, `photos/`, `heartbeat.log`). Delete 
 
 1. Push the repo to GitHub. The workflow builds `ghcr.io/<owner>/snapwall` on every push to `main`, and a `v1.1.0` tag publishes `:1.1.0`.
    Make the package public, or add an `imagePullSecret`.
-2. Replace `OWNER` and set `cluster.name` in [deploy/flux/snapwall.yaml](deploy/flux/snapwall.yaml).
+2. Create the per-cluster ConfigMap: `kubectl apply -f deploy/cluster-config/nkp-onprem-joburg.yaml`
 3. `kubectl apply -f deploy/flux/snapwall.yaml`
 
 Why one replica with the `Recreate` strategy? A RWO volume attaches to one node at a time. A rolling update would start the new pod before the old one releases the disk, and the rollout would get stuck. `Recreate` stops the old pod first.
@@ -60,7 +60,16 @@ The 🇿🇦 flag emoji renders on macOS but not on Windows. Present from a Mac.
 
 ## Configuration
 
-`cluster.name` and everything under `app:` in [values.yaml](charts/snapwall/values.yaml) is shown on screen: `name`, `eventName`, `headline`, `tagline`, `accent`, `theme` (`dark`/`light`), `writeInterval`.
+Everything under `app:` in [values.yaml](charts/snapwall/values.yaml) is shown on screen: `name`, `eventName`, `headline`, `tagline`, `accent`, `theme` (`dark`/`light`), `writeInterval`.
+
+### Per-cluster identity
+
+`cluster.name` and `ingress.host` are not Helm values. They come from ConfigMap `snapwall-cluster-configmap` in the `snapwall` namespace, which the pod reads when it starts. The Deployment is therefore identical in every cluster, and an app snapshot restored into another cluster shows *that* cluster's name. See the examples in [deploy/cluster-config/](deploy/cluster-config/).
+
+- Create the ConfigMap in each cluster before the app arrives, and keep it out of app snapshots. It's labelled `snapwall-cluster-config: "true"`.
+- After editing it, run `kubectl -n snapwall rollout restart deploy/snapwall`.
+- The Ingress has no host by default, so it answers on whatever DNS name points at each cluster. `ingress.host` is only shown on screen as the URL.
+- Pod lineage records each pod's cluster, so after a restore the wall reads `nkp-onprem-joburg → nkp-nc2-azure`.
 Set `persistence.enabled: false` to use an `emptyDir` instead. Deleting the pod then wipes the wall, which is a useful contrast.
 
 Photos: JPEG, PNG, WebP or GIF. Large photos are downscaled to 2560px in the browser before upload. Safari can also convert HEIC.

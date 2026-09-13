@@ -141,6 +141,7 @@ kbd {
 
 .topbar-right { display: flex; align-items: center; gap: 28px; }
 .clock { font-size: 28px; font-weight: 500; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.url { font-size: 22px; font-weight: 500; color: var(--text-2); }
 
 .status {
   display: flex; align-items: center; gap: 14px;
@@ -308,7 +309,7 @@ kbd {
 .bottom { grid-area: bottom; display: grid; grid-template-columns: 1fr 600px; gap: 56px; align-items: stretch; }
 
 .lineage {
-  display: grid; grid-template-columns: 220px 1fr; align-items: center; gap: 28px;
+  display: grid; grid-template-columns: 196px 1fr; align-items: center; gap: 28px;
   border-top: 1px solid var(--faint);
 }
 .lineage-head { display: flex; flex-direction: column; gap: 8px; }
@@ -317,7 +318,7 @@ kbd {
   list-style: none;
   display: flex; flex-direction: row-reverse; justify-content: flex-end;
 }
-.gen { position: relative; flex: 0 0 210px; padding-top: 34px; }
+.gen { position: relative; flex: 0 0 216px; padding-top: 34px; }
 .gen::before {           /* connector */
   content: ""; position: absolute; top: 8px; left: 0; right: 0;
   height: 2px; background: var(--faint);
@@ -334,7 +335,13 @@ kbd {
 }
 .gen-name { display: block; font-family: var(--mono); font-size: 19px; font-weight: 600; color: var(--text-2); }
 .gen.current .gen-name { color: var(--text); }
-.gen-meta { display: block; margin-top: 4px; font-size: 16px; color: var(--text-3); white-space: nowrap; }
+.gen-cluster {
+  display: block; margin-top: 2px; padding-right: 12px;
+  font-size: 16px; font-weight: 500; color: var(--text-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gen.moved .gen-cluster { color: var(--accent); }   /* first pod after a move to another cluster */
+.gen-meta { display: block; margin-top: 2px; font-size: 16px; color: var(--text-3); white-space: nowrap; }
 .gen.fresh { animation: reveal 0.9s var(--ease) both; }
 .gen-more { flex: 0 0 auto; padding-top: 34px; font-size: 17px; color: var(--text-3); }
 

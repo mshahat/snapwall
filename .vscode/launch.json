@@ -10,7 +10,8 @@
       "env": {
         "DATA_DIR": "${workspaceFolder}/data",
         "PORT": "8080",
-        "CLUSTER_NAME": "nkp-jnb-demo",
+        "CLUSTER_NAME": "nkp-onprem-joburg",
+        "INGRESS_HOST": "localhost:8080",
         "POD_NAME": "snapwall-7d9f8c6b5-x2k4q",
         "POD_NAMESPACE": "snapwall",
         "NODE_NAME": "nkp-jnb-md-0-7xk2p",

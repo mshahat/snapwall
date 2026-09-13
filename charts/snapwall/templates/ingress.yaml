@@ -18,8 +18,7 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   rules:
-    - host: {{ .Values.ingress.host | quote }}
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
@@ -28,4 +27,7 @@ spec:
                 name: {{ include "snapwall.fullname" . }}
                 port:
                   name: http
+      {{- with .Values.ingress.host }}
+      host: {{ . | quote }}
+      {{- end }}
 {{- end }}

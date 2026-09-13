@@ -31,7 +31,10 @@ TAGLINE = os.environ.get("TAGLINE", "Built in minutes. Shipped by Git. Running a
 ACCENT = os.environ.get("ACCENT", "#0A84FF")
 THEME = os.environ.get("THEME", "dark")
 IMAGE = os.environ.get("IMAGE", "local/snapwall:dev")
-CLUSTER_NAME = os.environ.get("CLUSTER_NAME", "local")
+# Per-cluster identity comes from a ConfigMap in the pod's namespace (see the chart),
+# so a snapshot restored into another cluster picks up that cluster's values.
+CLUSTER_NAME = os.environ.get("CLUSTER_NAME") or "unknown"
+INGRESS_HOST = os.environ.get("INGRESS_HOST", "")
 POD_NAME = os.environ.get("POD_NAME", socket.gethostname())
 POD_NAMESPACE = os.environ.get("POD_NAMESPACE", "local")
 NODE_NAME = os.environ.get("NODE_NAME", "localhost")
@@ -49,7 +52,7 @@ STARTED_AT = time.time()
 # Changes whenever anything delivered through Git changes; the UI uses it to
 # notice a new rollout and refresh itself.
 CONFIG_HASH = hashlib.sha1(
-    "|".join([APP_VERSION, HEADLINE, TAGLINE, ACCENT, THEME, EVENT_NAME, APP_NAME, CLUSTER_NAME]).encode()
+    "|".join([APP_VERSION, HEADLINE, TAGLINE, ACCENT, THEME, EVENT_NAME, APP_NAME]).encode()
 ).hexdigest()[:12]
 
 app = Flask(__name__)
@@ -78,7 +81,8 @@ def init_storage():
             CREATE TABLE IF NOT EXISTS boots (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pod TEXT NOT NULL, node TEXT NOT NULL, version TEXT NOT NULL,
-                started_at REAL NOT NULL, last_seen REAL NOT NULL
+                started_at REAL NOT NULL, last_seen REAL NOT NULL,
+                cluster TEXT NOT NULL DEFAULT ''
             );
             CREATE TABLE IF NOT EXISTS heartbeats (ts INTEGER NOT NULL, pod TEXT NOT NULL);
             CREATE INDEX IF NOT EXISTS heartbeats_ts ON heartbeats (ts);
@@ -97,9 +101,12 @@ def init_storage():
         conn.execute(
             "INSERT OR IGNORE INTO meta (key, value) VALUES ('created_at', ?)", (str(time.time()),)
         )
+        # Volumes written by earlier versions gain the cluster column in place.
+        if "cluster" not in {r["name"] for r in conn.execute("PRAGMA table_info(boots)")}:
+            conn.execute("ALTER TABLE boots ADD COLUMN cluster TEXT NOT NULL DEFAULT ''")
         cur = conn.execute(
-            "INSERT INTO boots (pod, node, version, started_at, last_seen) VALUES (?, ?, ?, ?, ?)",
-            (POD_NAME, NODE_NAME, APP_VERSION, STARTED_AT, STARTED_AT),
+            "INSERT INTO boots (pod, node, version, started_at, last_seen, cluster) VALUES (?, ?, ?, ?, ?, ?)",
+            (POD_NAME, NODE_NAME, APP_VERSION, STARTED_AT, STARTED_AT, CLUSTER_NAME),
         )
         _boot_id = cur.lastrowid
     append_log(f"boot pod={POD_NAME} node={NODE_NAME} cluster={CLUSTER_NAME} version={APP_VERSION}")
@@ -194,7 +201,7 @@ def state():
         created_at = float(conn.execute("SELECT value FROM meta WHERE key = 'created_at'").fetchone()[0])
         boots_total = conn.execute("SELECT COUNT(*) FROM boots").fetchone()[0]
         boots = [dict(r) for r in conn.execute(
-            "SELECT pod, node, version, started_at, last_seen FROM boots ORDER BY id DESC LIMIT 4"
+            "SELECT pod, node, cluster, version, started_at, last_seen FROM boots ORDER BY id DESC LIMIT 4"
         )]
         rows = conn.execute(
             "SELECT ts, pod FROM heartbeats WHERE ts > ? ORDER BY ts", (int(now) - 60,)
@@ -213,7 +220,8 @@ def state():
 
     fs = os.statvfs(DATA_DIR)
     return jsonify(
-        pod=POD_NAME, namespace=POD_NAMESPACE, node=NODE_NAME, cluster=CLUSTER_NAME, image=IMAGE,
+        pod=POD_NAME, namespace=POD_NAMESPACE, node=NODE_NAME, cluster=CLUSTER_NAME,
+        ingress_host=INGRESS_HOST, image=IMAGE,
         version=APP_VERSION, config_hash=CONFIG_HASH, uptime=now - STARTED_AT,
         storage=dict(
             pvc=PVC_NAME, path=os.path.abspath(DATA_DIR), writes=writes,

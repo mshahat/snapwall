@@ -5,9 +5,12 @@ image:
 
 imagePullSecrets: []
 
-# Kubernetes doesn't tell a pod which cluster it runs in, so Git does.
-cluster:
-  name: nkp-onprem-joburg
+# Per-cluster identity (cluster.name, ingress.host) is read at pod start from a
+# ConfigMap that already exists in the release namespace. This chart doesn't
+# create it, so it never ends up in rendered manifests or app snapshots.
+# Examples: deploy/cluster-config/
+clusterConfig:
+  configMapName: snapwall-cluster
 
 # Everything under `app` is rendered on the projector.
 # Edit, commit, push — Flux rolls it out and the screen narrates the change.
@@ -37,7 +40,7 @@ ingress:
   annotations: {}
   # ingress-nginx caps uploads at 1m by default; photos need more:
   #   nginx.ingress.kubernetes.io/proxy-body-size: 64m
-  host: snapwall.example.com
+  host: ""              # empty = match any hostname, so the same Ingress works in every cluster
   tls: []
   #  - secretName: snapwall-tls
   #    hosts: [snapwall.example.com]

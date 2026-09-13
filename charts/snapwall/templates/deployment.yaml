@@ -40,8 +40,21 @@ spec:
               value: {{ include "snapwall.version" . | quote }}
             - name: IMAGE
               value: {{ include "snapwall.image" . | quote }}
+            # Per-cluster identity is read from a ConfigMap that already exists in the
+            # namespace, never rendered into this spec, so a snapshot restored into
+            # another cluster shows that cluster's values.
             - name: CLUSTER_NAME
-              value: {{ .Values.cluster.name | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.clusterConfig.configMapName }}
+                  key: cluster.name
+                  optional: true
+            - name: INGRESS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.clusterConfig.configMapName }}
+                  key: ingress.host
+                  optional: true
             - name: APP_NAME
               value: {{ .Values.app.name | quote }}
             - name: EVENT_NAME

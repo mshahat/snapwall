@@ -1,8 +1,9 @@
-SnapWall {{ include "snapwall.version" . }} is deploying to cluster {{ .Values.cluster.name }}, namespace {{ .Release.Namespace }}.
+SnapWall {{ include "snapwall.version" . }} is deploying to namespace {{ .Release.Namespace }}.
+The cluster name and URL on screen come from ConfigMap {{ .Values.clusterConfig.configMapName }} in this namespace.
 
 Open it:
 {{- if .Values.ingress.enabled }}
-  http://{{ .Values.ingress.host }}
+  http://{{ .Values.ingress.host | default "<the DNS name pointing at this cluster's ingress>" }}
 {{- else }}
   kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "snapwall.fullname" . }} 8080:{{ .Values.service.port }}
   open http://localhost:8080
