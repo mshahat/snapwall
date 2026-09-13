@@ -18,7 +18,7 @@ app:
   tagline: "AI Code Assisted . Built in minutes. Shipped by Git. Resilient Running anywhere."
   accent: "#0A84FF"     # try "#BF5AF2" (purple), "#30D158" (green), "#FF9F0A" (orange)
   theme: dark           # dark | light
-  writeInterval: 10      # seconds between heartbeats written to the volume
+  writeInterval: 5      # seconds between heartbeats written to the volume
 
 persistence:
   enabled: true         # false = emptyDir: photos and notes are lost when the pod goes away
