@@ -7,7 +7,7 @@ metadata:
   name: snapwall
   namespace: flux-system
 spec:
-  interval: 30s
+  interval: 5s
   url: https://github.com/mshahat/snapwall   # your repo
   ref:
     branch: main
@@ -21,7 +21,7 @@ metadata:
   name: snapwall
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 5s
   targetNamespace: snapwall
   releaseName: snapwall
   install:
