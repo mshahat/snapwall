@@ -2,5 +2,5 @@ apiVersion: v2
 name: snapwall
 description: A stateful Flask photo wall that stores photos, notes and a heartbeat on a ReadWriteOnce volume. Built for live GitOps demos.
 type: application
-version: 1.0.0
-appVersion: "1.0.0"
+version: 1.2.13
+appVersion: "1.2.13"
