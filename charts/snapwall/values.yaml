@@ -7,7 +7,7 @@ imagePullSecrets: []
 
 # Kubernetes doesn't tell a pod which cluster it runs in, so Git does.
 cluster:
-  name: nkp-cluster
+  name: nkp-onprem-joburg
 
 # Everything under `app` is rendered on the projector.
 # Edit, commit, push — Flux rolls it out and the screen narrates the change.
@@ -15,10 +15,10 @@ app:
   name: SnapWall
   eventName: ".NEXT on Tour 🇿🇦"
   headline: "Run NKP"
-  tagline: "Built in minutes. Shipped by Git. Running anywhere."
+  tagline: "AI Code Assisted . Built in minutes. Shipped by Git. Resilient Running anywhere."
   accent: "#0A84FF"     # try "#BF5AF2" (purple), "#30D158" (green), "#FF9F0A" (orange)
   theme: dark           # dark | light
-  writeInterval: 1      # seconds between heartbeats written to the volume
+  writeInterval: 10      # seconds between heartbeats written to the volume
 
 persistence:
   enabled: true         # false = emptyDir: photos and notes are lost when the pod goes away
@@ -32,7 +32,7 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations: {}
   # ingress-nginx caps uploads at 1m by default; photos need more:
