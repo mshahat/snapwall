@@ -19,7 +19,7 @@ app:
   eventName: ".NEXT on Tour 🇿🇦"
   headline: "Run NKP"
   tagline: "AI Code Assisted . Built in minutes. Shipped by Git. Resilient Running anywhere."
-  accent: "#0A84FF"     # try "#BF5AF2" (purple), "#30D158" (green), "#FF9F0A" (orange)
+  accent: "#30D158"     # try "#BF5AF2" (purple), "#30D158" (green), "#FF9F0A" (orange) , "#0A84FF" (Blue)
   theme: dark           # dark | light
   writeInterval: 5      # seconds between heartbeats written to the volume
 
