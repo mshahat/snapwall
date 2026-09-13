@@ -33,6 +33,14 @@ helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | 
 {{- printf "%s:%s" .Values.image.repository (include "snapwall.tag" .) -}}
 {{- end -}}
 
+{{- /* Ingress host: the ingress.host value if set, else ingress.host from the cluster ConfigMap.
+     lookup reads the live cluster at install/upgrade (empty under helm template), so with
+     neither set the Ingress answers on any hostname. */}}
+{{- define "snapwall.ingressHost" -}}
+{{- $cm := lookup "v1" "ConfigMap" .Release.Namespace .Values.clusterConfig.configMapName | default dict -}}
+{{- .Values.ingress.host | default (dig "data" "ingress.host" "" $cm) -}}
+{{- end -}}
+
 {{- define "snapwall.claimName" -}}
 {{- .Values.persistence.existingClaim | default (printf "%s-data" (include "snapwall.fullname" .)) -}}
 {{- end -}}

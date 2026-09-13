@@ -1,7 +1,9 @@
 # Per-cluster identity for SnapWall. Apply once, before the app:
 #   kubectl apply -f deploy/cluster-config/nkp-onprem-joburg.yaml
 # Not managed by Flux or the chart. Keep it out of app snapshots so each cluster keeps its own.
-# After changing it:  kubectl -n snapwall rollout restart deploy/snapwall
+# After changing it:
+#   kubectl -n snapwall rollout restart deploy/snapwall           # screen picks up the new values
+#   flux reconcile hr snapwall -n kommander-flux --force           # Ingress picks up the new host
 ---
 apiVersion: v1
 kind: Namespace
@@ -17,4 +19,4 @@ metadata:
     snapwall-cluster-config: "true"   # cluster-local: exclude from app snapshots
 data:
   cluster.name: nkp-onprem-joburg
-  ingress.host: snapwall.10.55.84.145.sslip.io   # shown on screen; point this DNS name at the cluster's ingress
+  ingress.host: snapwall.10.55.84.145.sslip.io   # shown on screen and set as the Ingress host; must resolve to the cluster's ingress

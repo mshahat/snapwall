@@ -67,8 +67,9 @@ Everything under `app:` in [values.yaml](charts/snapwall/values.yaml) is shown o
 `cluster.name` and `ingress.host` are not Helm values. They come from ConfigMap `snapwall-cluster` in the `snapwall` namespace, which the pod reads when it starts. The Deployment is therefore identical in every cluster, and an app snapshot restored into another cluster shows *that* cluster's name. See the examples in [deploy/cluster-config/](deploy/cluster-config/).
 
 - Create the ConfigMap in each cluster before the app arrives, and keep it out of app snapshots. It's labelled `snapwall-cluster-config: "true"`.
-- After editing it, run `kubectl -n snapwall rollout restart deploy/snapwall`.
-- The Ingress has no host by default, so it answers on whatever DNS name points at each cluster. `ingress.host` is only shown on screen as the URL.
+- After editing it, run `kubectl -n snapwall rollout restart deploy/snapwall` to update the screen, and `flux reconcile hr snapwall -n kommander-flux --force` to update the Ingress host.
+- Helm reads `ingress.host` from the ConfigMap at install/upgrade and sets it as the Ingress host. A non-empty `ingress.host` Helm value overrides it. If neither is set, the Ingress answers on any hostname.
+- A restored app snapshot brings the Ingress with the *source* cluster's host. It only answers that name until Flux upgrades the release in the new cluster.
 - Pod lineage records each pod's cluster, so after a restore the wall reads `nkp-onprem-joburg → nkp-nc2-azure`.
 Set `persistence.enabled: false` to use an `emptyDir` instead. Deleting the pod then wipes the wall, which is a useful contrast.
 

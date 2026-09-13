@@ -5,10 +5,10 @@ image:
 
 imagePullSecrets: []
 
-# Per-cluster identity (cluster.name, ingress.host) is read at pod start from a
-# ConfigMap that already exists in the release namespace. This chart doesn't
-# create it, so it never ends up in rendered manifests or app snapshots.
-# Examples: deploy/cluster-config/
+# Per-cluster identity (cluster.name, ingress.host) lives in a ConfigMap that
+# already exists in the release namespace; this chart never creates it.
+# The pod reads both at start to show them on screen, and Helm reads ingress.host
+# at install/upgrade to set the Ingress host. Examples: deploy/cluster-config/
 clusterConfig:
   configMapName: snapwall-cluster
 
@@ -40,7 +40,7 @@ ingress:
   annotations: {}
   # ingress-nginx caps uploads at 1m by default; photos need more:
   #   nginx.ingress.kubernetes.io/proxy-body-size: 64m
-  host: ""              # empty = match any hostname, so the same Ingress works in every cluster
+  host: ""              # empty = ingress.host from the clusterConfig ConfigMap; if that's missing too, any hostname
   tls: []
   #  - secretName: snapwall-tls
   #    hosts: [snapwall.example.com]

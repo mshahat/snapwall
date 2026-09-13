@@ -27,7 +27,7 @@ spec:
                 name: {{ include "snapwall.fullname" . }}
                 port:
                   name: http
-      {{- with .Values.ingress.host }}
+      {{- with include "snapwall.ingressHost" . }}
       host: {{ . | quote }}
       {{- end }}
 {{- end }}
