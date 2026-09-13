@@ -1,0 +1,15 @@
+Pulse {{ include "pulse.version" . }} is deploying to namespace {{ .Release.Namespace }}.
+
+Open it:
+{{- if .Values.ingress.enabled }}
+  http://{{ .Values.ingress.host }}
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "pulse.fullname" . }} 8080:{{ .Values.service.port }}
+  open http://localhost:8080
+{{- end }}
+
+Watch the disk:
+  kubectl -n {{ .Release.Namespace }} exec deploy/{{ include "pulse.fullname" . }} -- tail -f /data/heartbeat.log
+
+Prove persistence:
+  kubectl -n {{ .Release.Namespace }} delete pod -l app.kubernetes.io/instance={{ .Release.Name }}

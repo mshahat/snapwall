@@ -1,0 +1,48 @@
+image:
+  repository: ghcr.io/OWNER/pulse   # set to your registry
+  tag: ""                           # defaults to the chart appVersion; shown on screen as the version
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+# Everything under `app` is rendered on the projector.
+# Edit, commit, push — Flux rolls it out and the screen narrates the change.
+app:
+  name: Pulse
+  eventName: ".NEXT on Tour"
+  headline: "Hello, Kubernetes."
+  tagline: "Built in minutes. Shipped by Git. Running anywhere."
+  accent: "#0A84FF"     # try "#BF5AF2" (purple), "#30D158" (green), "#FF9F0A" (orange)
+  theme: dark           # dark | light
+  writeInterval: 1      # seconds between heartbeats written to the volume
+
+persistence:
+  enabled: true         # false = emptyDir: data is lost when the pod goes away
+  existingClaim: ""
+  storageClass: ""      # empty = cluster default StorageClass
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+service:
+  type: ClusterIP       # LoadBalancer is handy on stage if the cluster has one
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  host: pulse.example.com
+  tls: []
+  #  - secretName: pulse-tls
+  #    hosts: [pulse.example.com]
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

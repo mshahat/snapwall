@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-theme="{{ theme }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_name }} · {{ event_name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ config_hash }}">
+  <style>:root { --accent: {{ accent }}; }</style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+  </div>
+
+  <main class="stage" id="stage" data-config-hash="{{ config_hash }}" data-version="{{ version }}">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M2 12h4l2.5-6 5 12 2.5-6h6" /></svg>
+        </div>
+        <span class="brand-name">{{ app_name }}</span>
+        <span class="brand-sep"></span>
+        <span class="brand-event">{{ event_name }}</span>
+      </div>
+      <div class="topbar-right">
+        <div class="status" id="status" data-state="connecting">
+          <span class="status-dot"></span>
+          <span class="status-label" id="status-label">Connecting</span>
+        </div>
+        <div class="clock" id="clock">--:--</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Delivered by GitOps</p>
+      <h1 class="headline">{{ headline }}</h1>
+      <p class="tagline">{{ tagline }}</p>
+      <div class="chips">
+        <span class="chip chip-accent">v{{ version }}</span>
+        <span class="chip mono" id="image">—</span>
+      </div>
+
+      <div class="tiles">
+        <div class="tile">
+          <span class="tile-label">Pod</span>
+          <span class="tile-value mono" id="pod">—</span>
+          <span class="tile-sub" id="namespace">—</span>
+        </div>
+        <div class="tile">
+          <span class="tile-label">Node</span>
+          <span class="tile-value mono" id="node">—</span>
+          <span class="tile-sub">Scheduled by Kubernetes</span>
+        </div>
+        <div class="tile">
+          <span class="tile-label">Uptime</span>
+          <span class="tile-value" id="uptime">—</span>
+          <span class="tile-sub" id="generation">—</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="card disk">
+        <div class="card-head">
+          <span class="card-label">Written to persistent volume</span>
+          <span class="pill mono">ReadWriteOnce</span>
+        </div>
+        <div class="counter" id="writes">0</div>
+        <div class="counter-sub">heartbeats since <span id="first-write">—</span></div>
+
+        <div class="timeline" id="timeline" aria-label="Writes in the last 60 seconds"></div>
+        <div class="timeline-legend">
+          <span>60s ago</span><span>now</span>
+        </div>
+
+        <div class="usage">
+          <div class="usage-bar"><div class="usage-fill" id="usage-fill"></div></div>
+          <div class="usage-meta">
+            <span><strong id="used">—</strong> used of <span id="capacity">—</span></span>
+            <span class="mono" id="pvc">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card notes">
+        <div class="card-head">
+          <span class="card-label">Guestbook · saved on disk</span>
+          <button class="add" id="add-note" title="Write a note (N)" aria-label="Write a note">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+          </button>
+        </div>
+        <ul class="note-list" id="notes">
+          <li class="note-empty">Press <kbd>N</kbd> to write the first note to disk.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <footer class="lineage">
+      <div class="lineage-head">
+        <span class="card-label">Pod lineage</span>
+        <span class="lineage-sub" id="lineage-sub">Every pod that has owned this volume</span>
+      </div>
+      <ol class="lineage-track" id="lineage"></ol>
+    </footer>
+  </main>
+
+  <!-- Moment overlay: new pod / new version / new config -->
+  <div class="moment" id="moment" hidden>
+    <div class="moment-card">
+      <div class="moment-icon" id="moment-icon"></div>
+      <h2 class="moment-title" id="moment-title"></h2>
+      <p class="moment-text" id="moment-text"></p>
+    </div>
+  </div>
+
+  <!-- Note composer -->
+  <div class="sheet" id="sheet" hidden>
+    <form class="sheet-card" id="note-form" autocomplete="off">
+      <span class="card-label">Write to the volume</span>
+      <input id="note-input" maxlength="80" placeholder="Hello from the audience 👋" />
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost" id="note-cancel">Cancel</button>
+        <button type="submit" class="btn primary">Save to disk</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}?v={{ config_hash }}"></script>
+</body>
+</html>

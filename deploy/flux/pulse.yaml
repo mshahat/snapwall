@@ -1,0 +1,39 @@
+# Apply once:  kubectl apply -f deploy/flux/pulse.yaml
+# From then on, Git is the only interface: edit charts/pulse/values.yaml, commit, push.
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: pulse
+  namespace: flux-system
+spec:
+  interval: 30s
+  url: https://github.com/OWNER/pulse   # your repo
+  ref:
+    branch: main
+  ignore: |
+    /*
+    !/charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pulse
+  namespace: flux-system
+spec:
+  interval: 1m
+  targetNamespace: pulse
+  releaseName: pulse
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: ./charts/pulse
+      # Every new commit produces a new chart artifact, no version bump needed.
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: pulse
+  values:
+    image:
+      repository: ghcr.io/OWNER/pulse   # lowercase owner

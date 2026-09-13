@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Pulse (Flask)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app/app.py",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DATA_DIR": "${workspaceFolder}/data",
+        "PORT": "8080",
+        "EVENT_NAME": ".NEXT on Tour",
+        "POD_NAME": "pulse-7d9f8c6b5-x2k4q",
+        "POD_NAMESPACE": "demo",
+        "NODE_NAME": "nkp-worker-01",
+        "PVC_NAME": "pulse-data",
+        "IMAGE": "ghcr.io/you/pulse:1.0.0"
+      },
+      "justMyCode": true
+    }
+  ]
+}
