@@ -15,8 +15,11 @@ spec:
       {{- include "snapwall.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      # No helm.sh/chart here: Flux bumps the chart version on every commit, and
+      # the pod should only restart when something it actually runs changes.
       labels:
-        {{- include "snapwall.labels" . | nindent 8 }}
+        {{- include "snapwall.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/version: {{ include "snapwall.version" . | quote }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
