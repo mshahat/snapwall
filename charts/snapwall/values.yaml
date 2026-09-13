@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/OWNER/snapwall   # set to your registry
+  repository: ghcr.io/mshahat/snapwall   # set to your registry
   tag: ""                              # defaults to the chart appVersion; shown on screen as the version
   pullPolicy: IfNotPresent
 

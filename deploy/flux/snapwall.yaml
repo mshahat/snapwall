@@ -8,7 +8,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30s
-  url: https://github.com/OWNER/snapwall   # your repo
+  url: https://github.com/mshahat/snapwall   # your repo
   ref:
     branch: main
   ignore: |
@@ -36,6 +36,6 @@ spec:
         name: snapwall
   values:
     image:
-      repository: ghcr.io/OWNER/snapwall   # lowercase owner
+      repository: ghcr.io/mshahat/snapwall   # lowercase owner
     cluster:
       name: nkp-cluster                    # the name you want on screen
