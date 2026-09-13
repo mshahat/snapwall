@@ -17,4 +17,4 @@ metadata:
     snapwall-cluster-config: "true"   # cluster-local: exclude from app snapshots
 data:
   cluster.name: nkp-onprem-joburg
-  ingress.host: snapwall.joburg.example.com   # shown on screen; point this DNS name at the cluster's ingress
+  ingress.host: snapwall.10.55.84.145.sslip.io   # shown on screen; point this DNS name at the cluster's ingress
