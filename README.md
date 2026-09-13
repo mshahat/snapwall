@@ -64,7 +64,7 @@ Everything under `app:` in [values.yaml](charts/snapwall/values.yaml) is shown o
 
 ### Per-cluster identity
 
-`cluster.name` and `ingress.host` are not Helm values. They come from ConfigMap `snapwall-cluster-configmap` in the `snapwall` namespace, which the pod reads when it starts. The Deployment is therefore identical in every cluster, and an app snapshot restored into another cluster shows *that* cluster's name. See the examples in [deploy/cluster-config/](deploy/cluster-config/).
+`cluster.name` and `ingress.host` are not Helm values. They come from ConfigMap `snapwall-cluster` in the `snapwall` namespace, which the pod reads when it starts. The Deployment is therefore identical in every cluster, and an app snapshot restored into another cluster shows *that* cluster's name. See the examples in [deploy/cluster-config/](deploy/cluster-config/).
 
 - Create the ConfigMap in each cluster before the app arrives, and keep it out of app snapshots. It's labelled `snapwall-cluster-config: "true"`.
 - After editing it, run `kubectl -n snapwall rollout restart deploy/snapwall`.
