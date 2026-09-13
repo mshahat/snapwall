@@ -19,4 +19,4 @@ metadata:
     snapwall-cluster-config: "true"   # cluster-local: exclude from app snapshots
 data:
   cluster.name: nkp-nc2-azure
-  ingress.host: snapwall.azure.example.com   # shown on screen and set as the Ingress host; must resolve to the cluster's ingress
+  ingress.host: snapwall.10.55.84.149.sslip.io   # shown on screen and set as the Ingress host; must resolve to the cluster's ingress
