@@ -36,7 +36,7 @@ service:
 
 ingress:
   enabled: true
-  className: ""
+  className: "kommander-traefik"
   annotations: {}
   # ingress-nginx caps uploads at 1m by default; photos need more:
   #   nginx.ingress.kubernetes.io/proxy-body-size: 64m
