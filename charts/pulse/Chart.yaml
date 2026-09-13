@@ -1,6 +1,0 @@
-apiVersion: v2
-name: pulse
-description: A stateful Flask app that writes a heartbeat to a ReadWriteOnce volume. Built for live GitOps demos.
-type: application
-version: 1.0.0
-appVersion: "1.0.0"

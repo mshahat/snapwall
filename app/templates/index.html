@@ -18,7 +18,7 @@
     <header class="topbar">
       <div class="brand">
         <div class="mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M2 12h4l2.5-6 5 12 2.5-6h6" /></svg>
+          <svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3.5" /><circle cx="8.8" cy="9.8" r="1.7" /><path d="M20.5 16.5l-5-5-9.5 8" /></svg>
         </div>
         <span class="brand-name">{{ app_name }}</span>
         <span class="brand-sep"></span>
@@ -33,61 +33,28 @@
       </div>
     </header>
 
-    <section class="hero">
-      <p class="eyebrow">Delivered by GitOps</p>
-      <h1 class="headline">{{ headline }}</h1>
-      <p class="tagline">{{ tagline }}</p>
-      <div class="chips">
-        <span class="chip chip-accent">v{{ version }}</span>
-        <span class="chip mono" id="image">—</span>
-      </div>
-
-      <div class="tiles">
-        <div class="tile">
-          <span class="tile-label">Pod</span>
-          <span class="tile-value mono" id="pod">—</span>
-          <span class="tile-sub" id="namespace">—</span>
-        </div>
-        <div class="tile">
-          <span class="tile-label">Node</span>
-          <span class="tile-value mono" id="node">—</span>
-          <span class="tile-sub">Scheduled by Kubernetes</span>
-        </div>
-        <div class="tile">
-          <span class="tile-label">Uptime</span>
-          <span class="tile-value" id="uptime">—</span>
-          <span class="tile-sub" id="generation">—</span>
+    <section class="left">
+      <div class="intro">
+        <p class="eyebrow">Delivered by GitOps</p>
+        <h1 class="headline">{{ headline }}</h1>
+        <p class="tagline">{{ tagline }}</p>
+        <div class="chips">
+          <span class="chip chip-accent">v{{ version }}</span>
+          <span class="chip mono" id="image">—</span>
         </div>
       </div>
-    </section>
 
-    <aside class="side">
-      <div class="card disk">
-        <div class="card-head">
-          <span class="card-label">Written to persistent volume</span>
-          <span class="pill mono">ReadWriteOnce</span>
-        </div>
-        <div class="counter" id="writes">0</div>
-        <div class="counter-sub">heartbeats since <span id="first-write">—</span></div>
-
-        <div class="timeline" id="timeline" aria-label="Writes in the last 60 seconds"></div>
-        <div class="timeline-legend">
-          <span>60s ago</span><span>now</span>
-        </div>
-
-        <div class="usage">
-          <div class="usage-bar"><div class="usage-fill" id="usage-fill"></div></div>
-          <div class="usage-meta">
-            <span><strong id="used">—</strong> used of <span id="capacity">—</span></span>
-            <span class="mono" id="pvc">—</span>
-          </div>
-        </div>
-      </div>
+      <dl class="card facts">
+        <div class="fact"><dt>Cluster</dt><dd class="mono" id="cluster">—</dd></div>
+        <div class="fact"><dt>Node</dt><dd class="mono" id="node">—</dd></div>
+        <div class="fact"><dt>Pod</dt><dd class="mono" id="pod">—</dd></div>
+        <div class="fact"><dt>Uptime</dt><dd id="uptime">—</dd></div>
+      </dl>
 
       <div class="card notes">
         <div class="card-head">
           <span class="card-label">Guestbook · saved on disk</span>
-          <button class="add" id="add-note" title="Write a note (N)" aria-label="Write a note">
+          <button class="round" id="add-note" title="Write a note (N)" aria-label="Write a note">
             <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
           </button>
         </div>
@@ -95,16 +62,81 @@
           <li class="note-empty">Press <kbd>N</kbd> to write the first note to disk.</li>
         </ul>
       </div>
-    </aside>
+    </section>
 
-    <footer class="lineage">
-      <div class="lineage-head">
-        <span class="card-label">Pod lineage</span>
-        <span class="lineage-sub" id="lineage-sub">Every pod that has owned this volume</span>
+    <section class="wall">
+      <div class="wall-head">
+        <span class="card-label">Photo wall · stored on the volume</span>
+        <div class="wall-actions">
+          <span class="wall-count" id="photo-count"></span>
+          <button class="round" id="add-photo" title="Upload photos (U)" aria-label="Upload photos">
+            <svg viewBox="0 0 24 24"><path d="M12 16V5M7 9.5L12 4.5l5 5M5 19.5h14" /></svg>
+          </button>
+        </div>
       </div>
-      <ol class="lineage-track" id="lineage"></ol>
+      <div class="wall-grid" id="wall" data-count="0">
+        <button class="wall-empty" id="wall-empty">
+          <span class="wall-empty-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3.5" /><circle cx="8.8" cy="9.8" r="1.7" /><path d="M20.5 16.5l-5-5-9.5 8" /></svg>
+          </span>
+          <span class="wall-empty-title">Drop photos here</span>
+          <span class="wall-empty-sub">or press <kbd>U</kbd> to choose. They're saved to the persistent volume.</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="bottom">
+      <div class="lineage">
+        <div class="lineage-head">
+          <span class="card-label">Pod lineage</span>
+          <span class="lineage-sub" id="lineage-sub">Pods that owned this volume</span>
+        </div>
+        <ol class="lineage-track" id="lineage"></ol>
+      </div>
+
+      <div class="card disk">
+        <div class="disk-head">
+          <span class="card-label">Written to disk</span>
+          <span class="disk-pvc mono" id="pvc">—</span>
+        </div>
+        <div class="disk-body">
+          <span class="disk-count" id="writes">0</span>
+          <div class="disk-bars" id="timeline" aria-label="Writes in the last 30 seconds"></div>
+          <span class="disk-used"><strong id="used">—</strong> of <span id="capacity">—</span></span>
+        </div>
+      </div>
     </footer>
+
+    <div class="toast" id="toast" hidden>
+      <span class="toast-icon" id="toast-icon"></span>
+      <span id="toast-text"></span>
+    </div>
   </main>
+
+  <input type="file" id="file-input" accept="image/*" multiple hidden>
+
+  <!-- Drag & drop target -->
+  <div class="drop" id="drop" hidden>
+    <div class="canvas">
+      <div class="drop-frame">
+        <span class="drop-title">Drop to save on the volume</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen photo viewer -->
+  <div class="spotlight" id="spotlight" hidden>
+    <div class="canvas">
+      <img class="spot-img" id="spot-img" alt="">
+      <div class="spot-caption" id="spot-caption"></div>
+      <button class="spot-btn spot-prev" id="spot-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg></button>
+      <button class="spot-btn spot-next" id="spot-next" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg></button>
+      <div class="spot-tools">
+        <button class="spot-btn spot-delete" id="spot-delete" aria-label="Delete photo"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.5h4V7M7 7l1 13h8l1-13" /></svg><span>Delete?</span></button>
+        <button class="spot-btn" id="spot-close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+      </div>
+    </div>
+  </div>
 
   <!-- Moment overlay: new pod / new version / new config -->
   <div class="moment" id="moment" hidden>
@@ -119,7 +151,7 @@
   <div class="sheet" id="sheet" hidden>
     <form class="sheet-card" id="note-form" autocomplete="off">
       <span class="card-label">Write to the volume</span>
-      <input id="note-input" maxlength="80" placeholder="Hello from the audience 👋" />
+      <input id="note-input" maxlength="80" placeholder="Sawubona from the audience 👋" />
       <div class="sheet-actions">
         <button type="button" class="btn ghost" id="note-cancel">Cancel</button>
         <button type="submit" class="btn primary">Save to disk</button>

@@ -1,14 +1,14 @@
-# Apply once:  kubectl apply -f deploy/flux/pulse.yaml
-# From then on, Git is the only interface: edit charts/pulse/values.yaml, commit, push.
+# Apply once:  kubectl apply -f deploy/flux/snapwall.yaml
+# From then on, Git is the only interface: edit charts/snapwall/values.yaml, commit, push.
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
-  name: pulse
+  name: snapwall
   namespace: flux-system
 spec:
   interval: 30s
-  url: https://github.com/OWNER/pulse   # your repo
+  url: https://github.com/OWNER/snapwall   # your repo
   ref:
     branch: main
   ignore: |
@@ -18,22 +18,24 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: pulse
+  name: snapwall
   namespace: flux-system
 spec:
   interval: 1m
-  targetNamespace: pulse
-  releaseName: pulse
+  targetNamespace: snapwall
+  releaseName: snapwall
   install:
     createNamespace: true
   chart:
     spec:
-      chart: ./charts/pulse
+      chart: ./charts/snapwall
       # Every new commit produces a new chart artifact, no version bump needed.
       reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: pulse
+        name: snapwall
   values:
     image:
-      repository: ghcr.io/OWNER/pulse   # lowercase owner
+      repository: ghcr.io/OWNER/snapwall   # lowercase owner
+    cluster:
+      name: nkp-cluster                    # the name you want on screen

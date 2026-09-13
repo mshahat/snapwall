@@ -1,0 +1,16 @@
+SnapWall {{ include "snapwall.version" . }} is deploying to cluster {{ .Values.cluster.name }}, namespace {{ .Release.Namespace }}.
+
+Open it:
+{{- if .Values.ingress.enabled }}
+  http://{{ .Values.ingress.host }}
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "snapwall.fullname" . }} 8080:{{ .Values.service.port }}
+  open http://localhost:8080
+{{- end }}
+
+Look at the disk:
+  kubectl -n {{ .Release.Namespace }} exec deploy/{{ include "snapwall.fullname" . }} -- ls -lh /data/photos
+  kubectl -n {{ .Release.Namespace }} exec deploy/{{ include "snapwall.fullname" . }} -- tail -f /data/heartbeat.log
+
+Prove persistence:
+  kubectl -n {{ .Release.Namespace }} delete pod -l app.kubernetes.io/instance={{ .Release.Name }}

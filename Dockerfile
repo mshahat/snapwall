@@ -12,12 +12,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 
-RUN useradd --uid 10001 --no-create-home pulse \
-    && mkdir -p /data && chown pulse /data
+RUN useradd --uid 10001 --no-create-home snapwall \
+    && mkdir -p /data && chown snapwall /data
 USER 10001
 
 EXPOSE 8080
 VOLUME ["/data"]
 
 # One worker on purpose: a single writer owns the RWO volume.
-CMD ["gunicorn", "--chdir", "app", "--bind", "0.0.0.0:8080", "--workers", "1", "--threads", "8", "--graceful-timeout", "10", "app:app"]
+CMD ["gunicorn", "--chdir", "app", "--bind", "0.0.0.0:8080", "--workers", "1", "--threads", "8", "--timeout", "120", "--graceful-timeout", "10", "app:app"]

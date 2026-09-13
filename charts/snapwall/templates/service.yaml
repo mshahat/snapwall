@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "pulse.fullname" . }}
+  name: {{ include "snapwall.fullname" . }}
   labels:
-    {{- include "pulse.labels" . | nindent 4 }}
+    {{- include "snapwall.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   selector:
-    {{- include "pulse.selectorLabels" . | nindent 4 }}
+    {{- include "snapwall.selectorLabels" . | nindent 4 }}
   ports:
     - name: http
       port: {{ .Values.service.port }}

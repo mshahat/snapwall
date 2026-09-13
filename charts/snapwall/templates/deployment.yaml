@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pulse.fullname" . }}
+  name: {{ include "snapwall.fullname" . }}
   labels:
-    {{- include "pulse.labels" . | nindent 4 }}
+    {{- include "snapwall.labels" . | nindent 4 }}
 spec:
   # A ReadWriteOnce volume attaches to one node at a time, so there is exactly
   # one replica and the old pod is stopped before the new one starts.
@@ -12,11 +12,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      {{- include "pulse.selectorLabels" . | nindent 6 }}
+      {{- include "snapwall.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "pulse.labels" . | nindent 8 }}
+        {{- include "snapwall.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -29,17 +29,19 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       terminationGracePeriodSeconds: 15
       containers:
-        - name: pulse
-          image: {{ include "pulse.image" . }}
+        - name: snapwall
+          image: {{ include "snapwall.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
           env:
             - name: APP_VERSION
-              value: {{ include "pulse.version" . | quote }}
+              value: {{ include "snapwall.version" . | quote }}
             - name: IMAGE
-              value: {{ include "pulse.image" . | quote }}
+              value: {{ include "snapwall.image" . | quote }}
+            - name: CLUSTER_NAME
+              value: {{ .Values.cluster.name | quote }}
             - name: APP_NAME
               value: {{ .Values.app.name | quote }}
             - name: EVENT_NAME
@@ -57,7 +59,7 @@ spec:
             - name: DATA_DIR
               value: /data
             - name: PVC_NAME
-              value: {{ ternary (include "pulse.claimName" .) "emptyDir" .Values.persistence.enabled | quote }}
+              value: {{ ternary (include "snapwall.claimName" .) "emptyDir" .Values.persistence.enabled | quote }}
             - name: POD_NAME
               valueFrom: { fieldRef: { fieldPath: metadata.name } }
             - name: POD_NAMESPACE
@@ -83,7 +85,7 @@ spec:
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "pulse.claimName" . }}
+            claimName: {{ include "snapwall.claimName" . }}
           {{- else }}
           emptyDir: {}
           {{- end }}

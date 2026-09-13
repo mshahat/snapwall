@@ -1,27 +1,31 @@
 image:
-  repository: ghcr.io/OWNER/pulse   # set to your registry
-  tag: ""                           # defaults to the chart appVersion; shown on screen as the version
+  repository: ghcr.io/OWNER/snapwall   # set to your registry
+  tag: ""                              # defaults to the chart appVersion; shown on screen as the version
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 
+# Kubernetes doesn't tell a pod which cluster it runs in, so Git does.
+cluster:
+  name: nkp-cluster
+
 # Everything under `app` is rendered on the projector.
 # Edit, commit, push — Flux rolls it out and the screen narrates the change.
 app:
-  name: Pulse
-  eventName: ".NEXT on Tour"
-  headline: "Hello, Kubernetes."
+  name: SnapWall
+  eventName: ".NEXT on Tour 🇿🇦"
+  headline: "Run NKP"
   tagline: "Built in minutes. Shipped by Git. Running anywhere."
   accent: "#0A84FF"     # try "#BF5AF2" (purple), "#30D158" (green), "#FF9F0A" (orange)
   theme: dark           # dark | light
   writeInterval: 1      # seconds between heartbeats written to the volume
 
 persistence:
-  enabled: true         # false = emptyDir: data is lost when the pod goes away
+  enabled: true         # false = emptyDir: photos and notes are lost when the pod goes away
   existingClaim: ""
   storageClass: ""      # empty = cluster default StorageClass
   accessMode: ReadWriteOnce
-  size: 1Gi
+  size: 5Gi
 
 service:
   type: ClusterIP       # LoadBalancer is handy on stage if the cluster has one
@@ -31,17 +35,19 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
-  host: pulse.example.com
+  # ingress-nginx caps uploads at 1m by default; photos need more:
+  #   nginx.ingress.kubernetes.io/proxy-body-size: 64m
+  host: snapwall.example.com
   tls: []
-  #  - secretName: pulse-tls
-  #    hosts: [pulse.example.com]
+  #  - secretName: snapwall-tls
+  #    hosts: [snapwall.example.com]
 
 resources:
   requests:
     cpu: 50m
-    memory: 64Mi
+    memory: 96Mi
   limits:
-    memory: 256Mi
+    memory: 384Mi
 
 nodeSelector: {}
 tolerations: []

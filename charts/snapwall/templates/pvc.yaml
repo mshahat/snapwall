@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "pulse.claimName" . }}
+  name: {{ include "snapwall.claimName" . }}
   labels:
-    {{- include "pulse.labels" . | nindent 4 }}
+    {{- include "snapwall.labels" . | nindent 4 }}
   annotations:
-    # Keep the data even if the release is uninstalled.
+    # Keep the photos even if the release is uninstalled.
     helm.sh/resource-policy: keep
 spec:
   accessModes:
