@@ -83,3 +83,14 @@ Photos: JPEG, PNG, WebP or GIF. Large photos are downscaled to 2560px in the bro
 | `DELETE /api/photos/<id>` | Remove a photo |
 | `POST /api/notes` | `{"text": "..."}` writes a guestbook note |
 | `/healthz`, `/readyz` | Probes |
+
+
+-- 
+
+Steps 
+1. Apply the configmaps in each cluster
+2. Apply the ingress in the second cluster
+3. Deploy NDK
+4. Configure NDK for SnapWall
+5. Deploy Snapwall using FluxCD in ns snapwall
+6. Deploy podinfo as SnapWall Backend (snapwall-be) in ns snapwall-be
