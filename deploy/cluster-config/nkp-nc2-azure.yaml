@@ -20,3 +20,27 @@ metadata:
 data:
   cluster.name: nkp-nc2-azure
   ingress.host: snapwall.10.55.84.149.sslip.io   # shown on screen and set as the Ingress host; must resolve to the cluster's ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+  labels:
+    app.kubernetes.io/instance: snapwall
+    app.kubernetes.io/name: snapwall
+    app.kubernetes.io/version: 1.2.13
+  name: snapwall
+  namespace: snapwall
+spec:
+  ingressClassName: kommander-traefik
+  rules:
+    - host: snapwall.10.55.84.149.sslip.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: snapwall
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
