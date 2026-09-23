@@ -5,6 +5,6 @@ metadata:
  namespace: snapwall
 spec:
  interval:
-  minutes: 5
+  minutes: 60
  #startTime: "2025-10-06T19:39:30.936566+00:00"  # Optional. Defines when the scheduler should begin triggering jobs.
  #timeZoneName: <timezone-name>
