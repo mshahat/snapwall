@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Config
-INGRESS_IP="10.55.84.145"      # Replace with your actual Ingress IP/Hostname
-HOST_HEADER="snapwall-be.10.55.84.145.sslip.io"     # Virtual host header for Ingress routing
+INGRESS_IP="10.38.39.145"      # Replace with your actual Ingress IP/Hostname
+HOST_HEADER="snapwall.10.38.39.145.sslip.io"     # Virtual host header for Ingress routing
 TARGET_URL="https://${INGRESS_IP}/"
 CONCURRENCY="${1:-150}"         # Override on the command line, e.g. ./load.sh 150
 REQUEST_TIMEOUT=3              # Max seconds per request before curl gives up

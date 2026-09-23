@@ -12,7 +12,7 @@
 #   ./nkp-snapshot-dr.sh [options]
 #
 # Options:
-#   -s, --source-context NAME       Source kubeconfig context (default: nkp-onprem-joburg-admin@nkp-onprem-joburg)
+#   -s, --source-context NAME       Source kubeconfig context (default: nkp-onprem-jeddah-admin@nkp-onprem-jeddah)
 #   -t, --target-context NAME       Target kubeconfig context (default: nkp-nc2-azure-admin@nkp-nc2-azure)
 #   -n, --namespace NAME            Namespace (default: snapwall)
 #   -a, --application NAME          Application name (default: snapwall)
@@ -41,7 +41,7 @@ IFS=$'\n\t'
 # ---------------------------------------------------------------------------
 # Defaults (override via flags or environment variables of the same name)
 # ---------------------------------------------------------------------------
-SOURCE_CONTEXT="${SOURCE_CONTEXT:-nkp-onprem-joburg-admin@nkp-onprem-joburg}"
+SOURCE_CONTEXT="${SOURCE_CONTEXT:-nkp-onprem-jeddah-admin@nkp-onprem-jeddah}"
 TARGET_CONTEXT="${TARGET_CONTEXT:-nkp-nc2-azure-admin@nkp-nc2-azure}"
 NAMESPACE="${NAMESPACE:-snapwall}"
 APPLICATION="${APPLICATION:-snapwall}"
