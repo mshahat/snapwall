@@ -94,11 +94,11 @@ Steps
 - kubectl krew install ctx && kubectl krew install ns
 - nkp get kubeconfig -c nkp-onprem-jeddah -w default-workspace --kubeconfig nkp-quickstart/nkp-mgmt.conf  > nkp-onprem-jeddah.kubeconfig
 - nkp get kubeconfig -c nkp-nc2-azure -w default-workspace --kubeconfig nkp-quickstart/nkp-mgmt.conf  > nkp-nc2-azure.kubeconfig
-
+- install ndkcli kubectl ndk plugin 
 
 1. Apply the configmaps in each cluster
 2. Apply the ingress in the second cluster
 3. Deploy NDK
+4. deploy snapwall using fluxcd in ns snapwall
 4. Configure NDK for SnapWall
-5. Deploy Snapwall using FluxCD in ns snapwall
 6. Deploy podinfo as SnapWall Backend (snapwall-be) in ns snapwall-be

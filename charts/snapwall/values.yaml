@@ -19,7 +19,7 @@ app:
   eventName: "NKP Pitstop FY27 Q1 🏁🏎️"
   headline: "Run NKP"
   tagline: "AI Code Assisted . Built in minutes. Shipped by Git. Resilient Running anywhere."
-  accent: "#8347FF"     # try "#8347FF" (Nutanix purple), "#007749" (SA green), "#FF9F0A" (orange) , "#0A84FF" (Blue)
+  accent: "#0A84FF"     # try "#8347FF" (Nutanix purple), "#007749" (SA green), "#FF9F0A" (orange) , "#0A84FF" (Blue)
   theme: dark           # dark | light
   writeInterval: 5      # seconds between heartbeats written to the volume
 
