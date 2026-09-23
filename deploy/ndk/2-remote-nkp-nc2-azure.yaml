@@ -1,0 +1,10 @@
+apiVersion: dataservices.nutanix.com/v1alpha1
+kind: Remote
+metadata:
+  name: nkp-nc2-azure-remote 
+spec:
+  clusterName: nkp-nc2-azure
+  ndkServiceIp: 10.38.39.150
+  ndkServicePort: 2021 
+  tlsConfig:
+    skipTLSVerify: true

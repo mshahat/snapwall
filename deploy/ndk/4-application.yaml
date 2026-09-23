@@ -1,0 +1,27 @@
+apiVersion: dataservices.nutanix.com/v1alpha1
+kind: Application
+metadata:
+  name: snapwall
+  namespace: snapwall
+spec:
+  applicationSelector:
+    resourceLabelSelectors:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: snapwall
+        excludeResources:
+          - group: cilium.io
+            kind: CiliumEndpoint
+          - group: networking.k8s.io
+            kind: Ingress
+
+      # Exclude the cluster-local ConfigMap. 
+      - labelSelector:
+          matchLabels:
+            snapwall-cluster-config: "true"
+        excludeResources:
+          - group: ""
+            kind: ConfigMap
+
+  start: true
+  useExistingConfig: false

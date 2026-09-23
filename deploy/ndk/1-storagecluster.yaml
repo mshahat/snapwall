@@ -1,0 +1,7 @@
+apiVersion: dataservices.nutanix.com/v1alpha1
+kind: StorageCluster
+metadata:
+ name: phx-poc267
+spec:
+ storageServerUuid: 00065bfa-26cb-b6fe-0345-3cecef59ce3b   # prism element > settings > cluster details > cluster uuid
+ managementServerUuid: bc72e696-bb31-4de8-9f6f-b196295c10bc  # prism central > settings > prism central management > ID

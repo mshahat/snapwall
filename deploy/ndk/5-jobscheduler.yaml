@@ -1,0 +1,10 @@
+apiVersion: scheduler.nutanix.com/v1alpha1
+kind: JobScheduler
+metadata:
+ name: jobscheduler
+ namespace: snapwall
+spec:
+ interval:
+  minutes: 5
+ #startTime: "2025-10-06T19:39:30.936566+00:00"  # Optional. Defines when the scheduler should begin triggering jobs.
+ #timeZoneName: <timezone-name>

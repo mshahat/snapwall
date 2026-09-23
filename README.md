@@ -87,7 +87,15 @@ Photos: JPEG, PNG, WebP or GIF. Large photos are downscaled to 2560px in the bro
 
 -- 
 
-Steps 
+Steps
+
+- deploy two k8s clusters
+- install krew on jumpbox
+- kubectl krew install ctx && kubectl krew install ns
+- nkp get kubeconfig -c nkp-onprem-jeddah -w default-workspace --kubeconfig nkp-quickstart/nkp-mgmt.conf  > nkp-onprem-jeddah.kubeconfig
+- nkp get kubeconfig -c nkp-nc2-azure -w default-workspace --kubeconfig nkp-quickstart/nkp-mgmt.conf  > nkp-nc2-azure.kubeconfig
+
+
 1. Apply the configmaps in each cluster
 2. Apply the ingress in the second cluster
 3. Deploy NDK

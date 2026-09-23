@@ -1,0 +1,9 @@
+apiVersion: dataservices.nutanix.com/v1alpha1
+kind: ReplicationTarget
+metadata:
+  name: nkp-nc2-azure
+  namespace: snapwall
+spec:
+  namespaceName: snapwall
+  remoteName: nkp-nc2-azure-remote
+  serviceAccountName: default

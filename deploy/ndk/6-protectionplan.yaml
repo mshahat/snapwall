@@ -1,0 +1,9 @@
+apiVersion: dataservices.nutanix.com/v1alpha1
+kind: ProtectionPlan
+metadata: 
+ name: snapwall-async-protectionplan
+ namespace: snapwall
+spec: 
+ scheduleName: jobscheduler
+ retentionPolicy:
+   retentionCount: 3

@@ -16,7 +16,7 @@ clusterConfig:
 # Edit, commit, push — Flux rolls it out and the screen narrates the change.
 app:
   name: SnapWall
-  eventName: ".NEXT on Tour 🇿🇦"
+  eventName: "NKP Pitstop FY27 Q1 🏁🏎️"
   headline: "Run NKP"
   tagline: "AI Code Assisted . Built in minutes. Shipped by Git. Resilient Running anywhere."
   accent: "#8347FF"     # try "#8347FF" (Nutanix purple), "#007749" (SA green), "#FF9F0A" (orange) , "#0A84FF" (Blue)

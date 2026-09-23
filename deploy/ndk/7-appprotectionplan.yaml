@@ -1,0 +1,11 @@
+apiVersion: dataservices.nutanix.com/v1alpha1
+kind: AppProtectionPlan
+metadata:
+ name: snapwall-appprotectionplan
+ namespace: snapwall
+spec:
+  applicationName: snapwall
+  labels:
+    appName: snapwall
+  protectionPlanNames:
+  - snapwall-async-protectionplan
