@@ -18,5 +18,5 @@ metadata:
   labels:
     snapwall-cluster-config: "true"   # cluster-local: exclude from app snapshots
 data:
-  cluster.name: nkp-onprem-jeddah
-  ingress.host: snapwall.10.38.39.145.sslip.io   # shown on screen and set as the Ingress host; must resolve to the cluster's ingress
+  cluster.name: nkp-onprem
+  ingress.host: snapwall.10.38.207.135.sslip.io   # shown on screen and set as the Ingress host; must resolve to the cluster's ingress

@@ -4,7 +4,7 @@ metadata:
   name: nkp-nc2-azure-remote 
 spec:
   clusterName: nkp-nc2-azure
-  ndkServiceIp: 10.38.39.150
+  ndkServiceIp: 10.38.207.140
   ndkServicePort: 2021 
   tlsConfig:
     skipTLSVerify: true
