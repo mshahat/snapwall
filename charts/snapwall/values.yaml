@@ -16,10 +16,10 @@ clusterConfig:
 # Edit, commit, push — Flux rolls it out and the screen narrates the change.
 app:
   name: SnapWall
-  eventName: "DZone + Nutanix 🏁🏎️"
+  eventName: "Hala Amman 🇯🇴"
   headline: "Run NKP"
   tagline: "Build it . Ship it . Break it . Recover it"
-  accent: "#6DD4CE"     # try "#8347FF" (Nutanix purple), "#6DD4CE" (DZone green), "#FF9F0A" (orange) , "#0A84FF" (Blue)
+  accent: "#8347FF"     # try "#8347FF" (Nutanix purple), "#439455" (Jordan green), "#FF9F0A" (orange) , "#0A84FF" (Blue)
   theme: dark           # dark | light
   writeInterval: 5      # seconds between heartbeats written to the volume
 
